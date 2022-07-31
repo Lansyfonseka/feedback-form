@@ -8,7 +8,8 @@ type MyState = {
 type MyProps = {
   name: string,
   type: string,
-  label: string
+  label: string,
+  validate?: string
 }
 export default class CustomInput extends React.Component<MyProps, MyState> {
   constructor(props:MyProps) {

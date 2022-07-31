@@ -9,7 +9,7 @@
     font-size: 12px;
     color: #ff0000;
   }
-  input {
+  textarea {
     padding: 5px 10px;
     width: auto;
     font-size: 18px;
@@ -22,7 +22,7 @@
   .form-field--error {
     display: block;
   }
-  input {
+  textarea {
     border-color: #ff0000;
   }
 }
