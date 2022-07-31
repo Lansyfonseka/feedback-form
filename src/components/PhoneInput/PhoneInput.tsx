@@ -1,19 +1,28 @@
-import { useState } from 'react';
+import CustomInput from '../CustomInput/CustomInput';
 import './PhoneInput.scss';
 
-export default function PhoneInput(props:any) {
-  const [isError, setIsError] = useState(false);
-  const inputChange = (event: { target: any; }) => {
-    console.log(event.target.value)
-  };
-  const checkInput = (event: {target:HTMLInputElement}) => {
-    setIsError(!event.target.value);
+export default class PhoneInput extends CustomInput {
+  constructor(props:any) {
+    super(props);
+
+    this.phoneChange = this.phoneChange.bind(this);
   }
-  return <>
+  phoneChange(event: {target: HTMLInputElement}) {
+    const regExpNumber = new RegExp('\\D','gi');
+    const newValue = event.target.value;
+    const validateValue = newValue.replace(regExpNumber,'')
+    this.setState({value: validateValue});
+  }
+
+  render() {
+    const {name, type, label} = this.props;
+    const {isError, value} = this.state;
+    return <>
     <div className={`form-field  ${isError ? 'active-error' : ''}`}>
-      <label htmlFor={props.name}>{props.label}</label>
-      <input type={props.type} id={props.name} onChange={inputChange} onBlur={checkInput}/>
-      <div className="form-field--error">This field is requared</div>
-    </div>
-  </>
-}
+       <label htmlFor={name}>{label}</label>
+       <input type={type} id={name} value={value} onChange={this.phoneChange} onBlur={this.checkInput}/>
+       <div className="form-field--error">This field is requared</div>
+     </div>
+    </>
+  }
+} 
