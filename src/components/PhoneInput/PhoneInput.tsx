@@ -18,6 +18,6 @@ export default class PhoneInput extends CustomInput {
     const newValue = this.phoneChangeMiddleware(event.target.value);
     const resultValidations = this.state.validation.reduce((total,curr)=>(total = curr.test(newValue) && total),true);
     this.updateValid(resultValidations);
-    this.updateValue(newValue);
+    this.props.callbackSetValue(newValue)
   }
 } 

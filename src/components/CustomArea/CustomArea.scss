@@ -1,1 +1,21 @@
-// You can write your custom style for textarea here.
+.form-field {
+  textarea {
+    padding: 5px 10px;
+    width: auto;
+    font-size: 18px;
+    border: 0;
+    border-radius: 5px;
+  }
+}
+
+.active-error {
+   textarea {
+    outline: 2px solid #ff0000;
+  }
+}
+
+.invalid-field {
+  textarea {
+    background-color: #ff9292;;
+  }
+}

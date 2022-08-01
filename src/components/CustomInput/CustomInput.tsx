@@ -10,21 +10,16 @@ export default class CustomInput extends React.Component<CustomInputProps, Custo
     this.state = {
       isError: false,
       isValid: true,
-      value: '',
       validation: validationConfig(this.props.validations),
       middleware: middlewareConfig(this.props.middleware)
     }
     this.updateError = this.updateError.bind(this);
-    this.updateValue = this.updateValue.bind(this);
     this.updateValid = this.updateValid.bind(this);
     this.checkInput = this.checkInput.bind(this);
     this.inputChange = this.inputChange.bind(this);
   }
   updateError(newError:boolean) {
     this.setState({isError: newError})
-  }
-  updateValue(newValue:string) {
-    this.setState({value: newValue});
   }
   updateValid(newValid:boolean){
     this.setState({isValid: newValid})
@@ -37,16 +32,17 @@ export default class CustomInput extends React.Component<CustomInputProps, Custo
     const resultMiddleware = this.state.middleware.reduce((total,curr)=>curr(total),newValue);
     const resultValidations = this.state.validation.reduce((total,curr)=>(total = curr.test(resultMiddleware) && total),true);
     this.updateValid(resultValidations);
-    this.updateValue(resultMiddleware);
+    this.props.callbackSetValue(resultMiddleware);
   }
   render() {
-    const {name, type, label} = this.props;
-    const {isError, value, isValid} = this.state;
+    const {name, type, label, value} = this.props;
+    const {isError, isValid} = this.state;
     return <>
     <div className={`form-field${isError ? ' active-error' : ''}${isValid ? '' : ' invalid-field'}`}>
        <label htmlFor={name}>{label}</label>
        <input type={type || 'text'} id={name} value={value} onChange={this.inputChange} onBlur={this.checkInput}/>
        <div className="form-field--error">This field is requared</div>
+       <div className="form-field--valid">Invalid value</div>
      </div>
     </>
   }
