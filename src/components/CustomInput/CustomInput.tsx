@@ -1,6 +1,7 @@
 import React from 'react';
 import './CustomInput.scss';
 import {CustomInputProps,CustomInputState} from './helpers/CustomInputTypes';
+import middlewareConfig from './helpers/middlewareConfig';
 import validationConfig from './helpers/validationConfig';
 
 export default class CustomInput extends React.Component<CustomInputProps, CustomInputState> {
@@ -10,7 +11,8 @@ export default class CustomInput extends React.Component<CustomInputProps, Custo
       isError: false,
       isValid: true,
       value: '',
-      validation: validationConfig(this.props.validations)
+      validation: validationConfig(this.props.validations),
+      middleware: middlewareConfig(this.props.middleware)
     }
     this.updateError = this.updateError.bind(this);
     this.updateValue = this.updateValue.bind(this);
@@ -32,9 +34,10 @@ export default class CustomInput extends React.Component<CustomInputProps, Custo
   }
   inputChange(event: {target:HTMLInputElement | HTMLTextAreaElement}) {
     const newValue = event.target.value;
-    const resultValidations = this.state.validation.reduce((total,curr)=>(total = curr.test(newValue) && total),true);
+    const resultMiddleware = this.state.middleware.reduce((total,curr)=>curr(total),newValue);
+    const resultValidations = this.state.validation.reduce((total,curr)=>(total = curr.test(resultMiddleware) && total),true);
     this.updateValid(resultValidations);
-    this.updateValue(event.target.value);
+    this.updateValue(resultMiddleware);
   }
   render() {
     const {name, type, label} = this.props;
